@@ -1,0 +1,43 @@
+{
+  "name": "mansa-website",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "NEXT_TELEMETRY_DISABLED=1 next dev --hostname 127.0.0.1",
+    "build": "NEXT_TELEMETRY_DISABLED=1 next build --webpack",
+    "start": "NEXT_TELEMETRY_DISABLED=1 next start --hostname 127.0.0.1",
+    "preview": "npm run start",
+    "check": "tsc --noEmit",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:local": "playwright test --project=chromium --project=webkit",
+    "format": "prettier --write src scripts tests docs *.json *.mjs *.ts README.md",
+    "test:performance": "node scripts/performance.mjs"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.4.0",
+    "lenis": "1.3.26",
+    "motion": "^12.23.0",
+    "next": "^16.3.8",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three": "^0.183.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource/manrope": "^5.2.8",
+    "@fontsource/newsreader": "^5.2.8",
+    "@playwright/test": "^1.58.0",
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/three": "^0.183.0",
+    "prettier": "^3.9.9",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.3"
+  }
+}

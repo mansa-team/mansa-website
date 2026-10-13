@@ -11,9 +11,22 @@ test.describe('desktop scroll enhancement', () => {
 
   test('scroll clock rests completely before and after wheel input', async ({ page }) => {
     await ready(page);
-    await page.waitForTimeout(1400); // Let the finite opening choreography finish.
+    await page.evaluate(() => {
+      const root = document.documentElement;
+      root.dataset.testScrollEnds = '0';
+      window.addEventListener('scrollend', (event) => {
+        if (event instanceof CustomEvent && event.detail?.lenisScrollEnd) {
+          root.dataset.testScrollEnds = String(Number(root.dataset.testScrollEnds) + 1);
+        }
+      });
+    });
+    await expect(page.locator('.hero-art')).toHaveAttribute('data-motion-state', 'settled');
     const idleFrames = () =>
       page.evaluate(async () => {
+        // Drain callbacks queued by the final scroll event before measuring rest.
+        await new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        );
         const original = window.requestAnimationFrame;
         let callbacks = 0;
         window.requestAnimationFrame = (callback) =>
@@ -29,12 +42,14 @@ test.describe('desktop scroll enhancement', () => {
     await page.mouse.move(1000, 650);
     await page.mouse.wheel(0, 640);
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(638);
-    await page.waitForTimeout(300); // Includes Lenis's final scrollend notification.
+    await expect(page.locator('html')).toHaveAttribute('data-test-scroll-ends', '1');
+    await expect(page.locator('html')).not.toHaveClass(/lenis-scrolling/);
     expect(await idleFrames()).toBe(0);
     // A later gesture must restart with a fresh clock, not consume the idle time as one frame.
     await page.mouse.wheel(0, 320);
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(958);
-    await page.waitForTimeout(300);
+    await expect(page.locator('html')).toHaveAttribute('data-test-scroll-ends', '2');
+    await expect(page.locator('html')).not.toHaveClass(/lenis-scrolling/);
     expect(await idleFrames()).toBe(0);
   });
 

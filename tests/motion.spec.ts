@@ -203,8 +203,11 @@ for (const mode of ['reduce', 'save-data'] as const) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/estudo/camadas/');
     const slider = page.getByRole('slider', { name: 'Aproximar as camadas' });
+    await expect(slider).toBeEnabled();
     await slider.focus();
+    await expect(slider).toBeFocused();
     await page.keyboard.press('Home');
+    await expect(slider).toHaveValue('0');
     const image = page.locator('.layer-field .sculpture-poster');
     await expect
       .poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0))

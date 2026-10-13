@@ -1,0 +1,82 @@
+.route-pending-panel {
+  position: fixed;
+  z-index: 50;
+  right: clamp(24px, 4vw, 72px);
+  bottom: 24px;
+  width: min(264px, calc(100vw - 48px));
+  padding: 24px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 8px 30px -18px color-mix(in srgb, var(--ink) 24%, transparent);
+  pointer-events: none;
+  animation: pending-panel-in 140ms 100ms both;
+}
+.loading-mark {
+  width: min(100%, 280px);
+  font-family: var(--font-sans, 'Instrument Sans', Arial, sans-serif);
+}
+.loading-mark-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.065em;
+}
+.loading-mark-brand img {
+  object-fit: contain;
+}
+.loading-atlas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 36px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.loading-atlas span {
+  height: 3px;
+  background: var(--ink);
+  animation: loading-atlas-align 620ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.loading-atlas span:nth-child(2) {
+  animation-delay: 90ms;
+}
+.loading-atlas span:nth-child(3) {
+  animation-delay: 180ms;
+}
+.loading-mark p {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+@keyframes loading-atlas-align {
+  from {
+    opacity: 0.25;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pending-panel-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.loading-mark[data-static-motion] .loading-atlas span,
+.route-pending-panel[data-static-motion] {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-atlas span,
+  .route-pending-panel {
+    animation: none;
+  }
+}

@@ -1,0 +1,216 @@
+:root {
+  --motion-feedback: 140ms;
+  --motion-state: 180ms;
+  --motion-editorial: 420ms;
+  --motion-sculpture: 800ms;
+  --ease-settle: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.button,
+.site-header .header-contact {
+  transition: box-shadow var(--motion-feedback) var(--ease-settle);
+}
+.button:active,
+.button:focus-visible:active {
+  transform: none;
+}
+.button:not(:disabled):active,
+.site-header .header-contact:active {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+.button .arrow-icon,
+.text-link .arrow-icon,
+.header-contact .arrow-icon,
+.mobile-menu .arrow-icon,
+.footer-project-link .arrow-icon,
+.participation-links .arrow-icon {
+  transition: transform 160ms var(--ease-settle);
+}
+.button:focus-visible:active {
+  transform: none;
+}
+.button:disabled {
+  transform: none;
+  cursor: wait;
+}
+.desktop-nav a:focus-visible:after {
+  transform: scaleX(1);
+  transition: none;
+}
+.principle-index a {
+  transition:
+    text-decoration-color var(--motion-state),
+    color var(--motion-state);
+}
+.principle-index a[aria-current='location'] {
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+}
+.principle-index a[aria-current='location'] span {
+  color: var(--text);
+}
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  transition: border-color var(--motion-feedback);
+}
+.form-status {
+  border-left: 2px solid transparent;
+  padding-left: 12px;
+}
+.form-status:not(:empty) {
+  border-left-color: currentColor;
+}
+.button-copy[data-copied='true'] {
+  border-color: currentColor;
+}
+.button-copy > span {
+  display: inline-block;
+}
+.button-copy[data-copied='true'] > span {
+  animation: copy-confirm 180ms var(--ease-settle) both;
+}
+@keyframes copy-confirm {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.header-route-hint {
+  position: relative;
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.header-route-marks {
+  position: absolute;
+  inset: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  opacity: 0;
+}
+.header-route-marks i {
+  width: 2px;
+  height: 12px;
+  background: currentColor;
+}
+.header-route-hint[data-pending] > .arrow-icon {
+  animation: route-arrow-out 1ms 100ms forwards;
+}
+.header-route-hint[data-pending] .header-route-marks {
+  animation: route-marks-in 140ms 100ms both;
+}
+.header-route-hint[data-pending] i {
+  animation: route-mark-align 480ms 100ms var(--ease-settle) both;
+}
+.header-route-hint[data-pending] i:nth-child(2) {
+  animation-delay: 160ms;
+}
+.header-route-hint[data-pending] i:nth-child(3) {
+  animation-delay: 220ms;
+}
+@keyframes route-arrow-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes route-marks-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes route-mark-align {
+  from {
+    transform: translateY(4px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.mobile-menu summary:focus-visible span {
+  transition: none;
+}
+.site-header[data-save-data]
+  :is(
+    .menu-glyph > span,
+    .theme-control > svg,
+    .arrow-icon,
+    .header-route-marks,
+    .header-route-marks i
+  ) {
+  animation: none;
+  transition: none;
+}
+.site-header[data-save-data] .header-route-hint[data-pending] > .arrow-icon {
+  opacity: 0;
+}
+.site-header[data-save-data] .header-route-hint[data-pending] .header-route-marks {
+  opacity: 1;
+}
+.site-header .theme-control > svg {
+  transition: transform 180ms var(--ease-settle);
+}
+html[data-theme='dark'] .site-header .theme-control > svg {
+  transform: rotate(180deg);
+}
+@media (hover: hover) and (pointer: fine) {
+  .button:hover .arrow-icon,
+  .text-link:hover .arrow-icon,
+  .header-contact:hover .arrow-icon,
+  .mobile-menu a:hover .arrow-icon,
+  .footer-project-link:hover .arrow-icon,
+  .participation-links a:hover .arrow-icon {
+    transform: translate(3px, -3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(
+      .button,
+      .text-link,
+      .header-contact,
+      .mobile-menu a,
+      .footer-project-link,
+      .participation-links a
+    ):hover
+    .arrow-icon {
+    transform: none;
+  }
+  .button,
+  .button .arrow-icon,
+  .text-link .arrow-icon,
+  .header-contact .arrow-icon,
+  .participation-links .arrow-icon,
+  .principle-index a,
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    transition: none;
+    transform: none;
+  }
+  .site-header .menu-glyph > span,
+  .site-header .header-contact,
+  .site-header .theme-control > svg,
+  .mobile-menu .arrow-icon,
+  .footer-project-link .arrow-icon {
+    transition: none;
+  }
+  .button-copy[data-copied='true'] > span,
+  .header-route-hint[data-pending] > .arrow-icon,
+  .header-route-hint[data-pending] .header-route-marks,
+  .header-route-hint[data-pending] i {
+    animation: none;
+    transform: none;
+  }
+  .header-route-hint[data-pending] > .arrow-icon {
+    opacity: 0;
+  }
+  .header-route-hint[data-pending] .header-route-marks {
+    opacity: 1;
+  }
+}

@@ -404,7 +404,9 @@ test('layer study works with keyboard and respects a static reduced-motion prese
   await page.goto('/estudo/camadas/');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
   const control = page.getByRole('slider', { name: 'Aproximar as camadas' });
+  await expect(control).toBeEnabled();
   await control.focus();
+  await expect(control).toBeFocused();
   await page.keyboard.press('End');
   await expect(control).toHaveAttribute('aria-valuetext', '100 por cento — Horizonte');
   await page.keyboard.press('Home');

@@ -68,17 +68,24 @@ test('mobile entrance finishes once, leaves labels readable and does no idle wri
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
+  await expect(page.locator('.atlas-stage')).toHaveAttribute('data-enhanced', 'true');
   const art = page.locator('#principio-constancia .atlas-inline-art');
+  await art
+    .locator('.atlas-period')
+    .last()
+    .evaluate((element) => {
+      (window as any).__atlasEntranceMinimum = 1;
+      // Record the short entrance in the browser; a slow protocol round trip can miss it entirely.
+      new MutationObserver(() => {
+        (window as any).__atlasEntranceMinimum = Math.min(
+          (window as any).__atlasEntranceMinimum,
+          Number(getComputedStyle(element).opacity),
+        );
+      }).observe(element, { attributes: true, attributeFilter: ['style'] });
+    });
   await art.scrollIntoViewIfNeeded();
   await expect
-    .poll(async () =>
-      Number(
-        await art
-          .locator('.atlas-period')
-          .last()
-          .evaluate((el) => getComputedStyle(el).opacity),
-      ),
-    )
+    .poll(() => page.evaluate(() => (window as any).__atlasEntranceMinimum))
     .toBeLessThan(1);
   await expect(art.locator('.atlas-period').last()).toHaveCSS('opacity', '1');
   await expect(art.locator('text').filter({ hasText: 'Aportes periódicos' })).toHaveCSS(

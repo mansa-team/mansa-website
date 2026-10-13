@@ -41,6 +41,8 @@ export default function SmoothScroll() {
     };
     const destroy = () => {
       stopClock();
+      // Reset native scroll state so Lenis's pending velocity timer cannot restore its classes.
+      instance?.stop();
       // Remove wheel interception without ever locking the page.
       instance?.destroy();
       instance = undefined;

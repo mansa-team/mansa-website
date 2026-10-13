@@ -2,7 +2,8 @@ import { test, expect, type Page } from '@playwright/test';
 
 async function pauseEntryClock(page: Page) {
   const time = new Date('2026-10-13T12:00:00');
-  await page.clock.install({ time });
+  // Install before the pause target: the clock advances between these two protocol calls.
+  await page.clock.install({ time: new Date(time.getTime() - 60000) });
   await page.clock.pauseAt(time);
 }
 

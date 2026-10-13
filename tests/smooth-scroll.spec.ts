@@ -105,6 +105,22 @@ test.describe('desktop scroll enhancement', () => {
     await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(2);
   });
 
+  test('reduced motion keeps Lenis removed after the native scroll timer finishes', async ({
+    page,
+  }) => {
+    await ready(page);
+    const time = new Date('2026-10-13T12:00:00');
+    await page.clock.install({ time });
+    await page.clock.pauseAt(new Date(time.getTime() + 60000));
+    await page.evaluate(() => window.scrollTo(0, 640));
+    await expect(page.locator('html')).toHaveClass(/lenis-scrolling/);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(page.locator('html')).not.toHaveClass(/lenis/);
+    await page.clock.runFor(401);
+    await expect(page.locator('html')).not.toHaveClass(/lenis/);
+    expect(await page.evaluate(() => scrollY)).toBe(640);
+  });
+
   test('repeated route navigation leaves wheel travel and contact available', async ({ page }) => {
     await ready(page);
     for (let i = 0; i < 2; i++) {
